@@ -1,0 +1,31 @@
+head|
+import java.lang.Integer.parseInt
+
+fun doubleFac(n:Int):Int{
+	if(n<=1){
+		return 1
+	}
+	else{
+		return n* doubleFac(n-2)
+	}
+}
+
+|head
+
+[value, Int] from [] e: t ep arg{x0.value} {node.value = x1.value} ;
+[value, Int] from [inh, Int] ep : PLUS t ep arg{inh!! + x1.value!!} {node.value = x2.value} |
+    MINUS t ep arg{inh!! - x1.value!!} {node.value = x2.value}  | EPS{node.value = inh};
+[value, Int] from [] t : f tp arg{x0.value} {node.value = x1.value};
+[value, Int] from [inh, Int]  tp : MUL f tp arg{x1.value} {node.value = inh!! * x2.value!!} |
+    DIV f tp arg{x1.value} {node.value = inh!! / x2.value!!} | EPS {node.value = inh};
+[value, Int] from [] f  : BRO e  BRC fp arg{x1.value} {node.value = x3.value} | NUM {node.value = parseInt(x0.content) };
+[value, Int] from [inh, Int]  fp :  DFAC {node.value =  doubleFac(inh!!) } | EPS {node.value = inh};
+BRO : "[(]";
+BRC : "[)]";
+PLUS : "[+]";
+MINUS : "[-]";
+MUL : "[*]";
+DIV : "[/]";
+DFAC : "!!";
+NUM : "[0-9]+";
+SKIP : "[ \n\t]";

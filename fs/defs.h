@@ -1,0 +1,9 @@
+#define BUFFER_SIZE 8192
+#define FS_LOOKUP "lookup"
+#define FS_LIST "list"
+#define FS_CREATE "create"
+#define FS_RMDIR "rmdir"
+#define FS_UNLINK "unlink"
+#define FS_LINK "link"
+#define DT_DIR 4
+#define DT_REG 8

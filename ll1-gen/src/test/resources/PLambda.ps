@@ -1,0 +1,22 @@
+s : LAMBDA VAR  args D sp;
+sp : e | s;
+args : COMMA VAR args | EPS;
+e: t ep;
+ep : PLUS t ep | MINUS t ep |  EPS;
+t : f tp ;
+tp : MUL f tp |  DIV f tp | EPS ;
+f  : NUM | VAR | BRO e BRC;
+
+LAMBDA : "lambda";
+
+BRO : "[(]";
+BRC : "[)]";
+PLUS : "[+]";
+MUL : "[*]";
+MINUS : "[-]";
+DIV : "[/]";
+NUM : "[0-9]+";
+VAR : "[a-z]+";
+COMMA : "[,]";
+D : "[:]";
+SKIP : "[ \n\t]";

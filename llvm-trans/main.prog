@@ -1,0 +1,65 @@
+var XSIZE :integer is 256
+var YSIZE :integer is 256
+var REPEAT: integer is 200
+routine getColor(t: integer) : integer is
+    if t != 0
+    then
+        return 0 + t * 256
+    else
+        return 4294967295
+    end
+end
+
+routine drawGen(gen:array integer) is
+  for y in 0..YSIZE loop
+    for x in 0..XSIZE loop
+      simSetPixel(x, y, getColor(gen[y * XSIZE + x]))
+    end
+  end
+  simFlush()
+end
+
+routine calcGen(nextGen :array integer ,prevGen:array integer) is
+  for y in 0..YSIZE loop
+    for x in 0..XSIZE loop
+        var c :integer is 0
+        for dx in -1..2 loop
+            for dy in -1..2 loop
+                if (not ((dx == 0 )and (dy==0))) and
+                (prevGen[((simAbs(y - dy) % YSIZE) * XSIZE) + (simAbs(x - dx) % YSIZE)] != (0))
+                then
+                    c := c + 1
+                end
+            end
+        end
+        var curr:integer is prevGen[y * XSIZE + x]
+        if (c == 3) or ((curr!= 0) and (c == 2)) then
+            nextGen[y * XSIZE + x] := curr + 1
+        else
+            nextGen[y * XSIZE + x] := 0
+        end
+    end
+  end
+end
+
+routine main() : integer is
+  var  genf:array integer is [XSIZE* YSIZE]
+  var gens :array integer is [XSIZE *YSIZE]
+  var nextGen:array integer is genf
+  var prevGen: array integer is gens
+  init()
+  for y in 0 .. YSIZE loop
+     for x in 0 .. XSIZE loop
+        prevGen[y * XSIZE + x] := simRand() %2
+     end
+  end
+  drawGen(prevGen)
+  for  i in 0..REPEAT loop
+    calcGen(nextGen, prevGen)
+    drawGen(prevGen)
+    var tmp:array integer is prevGen
+    prevGen := nextGen
+    nextGen := tmp
+  end
+  return 0
+end
